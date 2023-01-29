@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Calendario</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+</head>
+<body>
+    
+    <div class="container">
+        <div class="calendar">
+            <div class="month">
+                <i class="fas fa-angle-left prev" style="color: aliceblue;"></i>
+                <div class="date">
+                    <h1>MAY</h1>
+                    <p>Fri May 29, 2020</p>
+                </div>
+                <i class="fas fa-angle-right next" style="color: aliceblue;"></i>
+            </div>
+            <div class="weekdays">
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sab</div>       
+            </div>
+            <div class="days">
+                
+            </div>
+            <div class="eventBtt"> 
+                <button onclick="openEvents()">Ver eventos</button>
+            </div>
+        </div>
+        <div class="info">
+            <div class="infoTitle"> <h1>Dia 1 de Janeiro</h1></div>
+            <p>detalhes do dia</p>
+            <div class="infoDisplay">
+                <div class="event">
+                    <h3 class="title1" id="T1">Titulo do evento</h3>
+                    <p class="pDesc">descricao do evento</p>
+                </div>
+            </div>
+                <div class="addBtn" >
+                    <button class="add" onclick="openInfo()"> + </button>
+                </div>
+        </div>
+    </div>
+
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', 'Arial Narrow Bold', sans-serif;
+}
+
+.container {
+    width: 100%;
+    height: 100vh;
+    background-image: url(pics/11.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: rgb(0, 0, 0);
+    color: rgb(27, 27, 27);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.calendar {
+    width: 45rem;
+    height: 52rem;
+    box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.5);
+    background-color: rgb(230, 230, 230);
+    border-radius: 5px;
+}
+
+
+
+
+.month {
+    width: 100%;
+    height: 12rem;
+    background-color: #80e000ff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    text-align: center;
+    text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+
+.month h1 {
+    text-transform: uppercase;
+    font-size: 3rem;
+    letter-spacing: 0.2rem;
+    margin-bottom: 1rem;
+    color: aliceblue;
+}
+
+.month p{
+    font-size: 1.6rem;
+    color:aliceblue
+}
+
+.weekdays {
+    width: 100%;
+    height: 5rem;
+    padding: 0 0.4rem;
+    display: flex;
+    align-items: center;
+    
+}
+
+.weekdays div {
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.1rem;
+    width: calc(44.2rem/7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+
+}
+
+.days {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    background-image: url(pics/edu1.png);
+    background-size: 100%;
+}
+
+
+
+.days div{
+    font-size: 1.4rem;
+    margin: 0.3rem;
+    width: calc(40.2rem/7);
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: rgba(0, 0, 0, 0.5);
+    transition: background-color 0.2s;
+
+}
+
+.days div:hover:not(.today) {
+    background-color: rgba(206, 206, 206, 0.336);
+    border: 0.2rem solid #777;
+    cursor: pointer;
+}
+
+.prev-date,
+.next-date {
+    opacity: 0.5;
+}
+
+.today {
+    background-color: #808080ff;
+    color: aliceblue;
+}
+
+.prev,
+.next {
+    cursor: pointer;
+    font-size: 3rem;
+}
+
+/* new changes */
+.info {
+    width: 45rem;
+    height: 52rem;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid black;
+    display: none;
+}
+
+.infoTitle {
+    margin: 15px;
+}
+
+.info p {
+    margin-left: 15px;
+}
+
+.infoDisplay {
+    width: 95%;
+    margin: 15px;
+    box-shadow:  rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+}
+
+.infoDisplay div {
+    margin-top: 20px;
+    padding-left: 15px;
+}
+.event {
+    margin: 5px;
+    border: 1px solid black;
+    border-radius: 15px;
+    padding-top: 10px;
+    height: 5rem   ;
+}
+
+.event h3 {
+    padding-left: 15px;
+    margin-bottom: 3px;
+}
+
+.add {
+    margin-top: 20px;
+    height: 50px;
+    width: 50px;    
+    border-radius: 50%;
+    background-color: rgba(218, 218, 218, 0.116);
+    align-self: center;
+    border: 3px solid black;
+    
+}
+
+.addBtn {
+    display: flex;
+    flex-direction: column;
+}
+.button {
+    height: 60px;
+    width: 150px;
+    align-self: center;
+}
+
+.eventBtt {
+    display: flex;
+    justify-content: center;
+}
+
+.eventBtt button {
+    background-color: #80e000ff;
+    height: 4rem;
+    width: 8rem;
+    border-radius: 10px;
+    border: 2px solid #777;
+    margin:10px;
+    color: aliceblue;
+}
