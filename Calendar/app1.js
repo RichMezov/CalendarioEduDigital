@@ -50,9 +50,7 @@ const renderCalendar = () => {
     //iteraçao que retorna Dias do mes atual
     for (let i = 1; i <= lastDayMonth; i++) {
         if (i === new Date().getDate() && date.getMonth() === new Date().getMonth()) {
-            days += `<div class="today">
-                ${i}
-                </div>`;
+            days += `<div class="today">${i}</div>`;
         }
         else
             days += `<div>${i}</div>`;
@@ -92,26 +90,27 @@ class Ocurrence {
 function saveOcurrence() {
 
     let dateInfo = document.querySelector(".dateInfo");
+    // const filterdates = []
 
     daySelector.addEventListener("click", (e) => {
         const el = e.target.innerHTML;
-        event_date = `${el} ${current_month.innerHTML} ${current_year}`;
+        event_date = `${el}-${current_month.innerHTML}-${current_year}`;
         dateInfo.innerText = event_date;
+        displayOcurrences(event_date) 
     })
 
     newEventButton.addEventListener("click", function () {
-        const splitEvent_date = event_date.replaceAll(' ','-')
         let descInfo = document.querySelector(".descInfo").value
-        const ocurrence = new Ocurrence(splitEvent_date, descInfo.split()) // arranjar forma de validar as datas, se elas ja existem vamos apenas adicionar novas descriçoes
+        const ocurrence = new Ocurrence(event_date, descInfo.split()) // arranjar forma de validar as datas, se elas ja existem vamos apenas adicionar novas descriçoes
         arr_events.push(ocurrence);
         descInfo = document.querySelector(".descInfo").value = ""
-        console.log(arr_events)
     })
 }
 saveOcurrence()
-// Agora o object ocurrence é salvo, e na decriçao temos uma array, vai facilitar em caso de 2 ou mais ocorrencias
 
  function displayOcurrences(ocurrenceDate) {
-// por cada item na array de eventos vamos criar uma div que contem o titulo h2 que recebe a data e alguma tag para adicionar a descriçao ao UI
-
+    const filterdates = arr_events.filter(events => events.date == ocurrenceDate)// Receber apenas a descriçao das datas desejadas
+    console.log(filterdates)
  }
+ 
+
