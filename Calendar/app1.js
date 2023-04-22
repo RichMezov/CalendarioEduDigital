@@ -5,10 +5,10 @@ const current_month = document.querySelector(".date h1");
 const current_fulldate = document.querySelector('.date p')
 const daySelector = document.querySelector(".days")
 const newEventButton = document.querySelector(".add")
+var event_date;
 
 const date = new Date();
 const current_year = date.getFullYear()
-
 
 const months = [
     "Janeiro",
@@ -29,9 +29,9 @@ const months = [
 const arr_events = []
 // Inicio  da funçao que adiciona os dias do mess
 const renderCalendar = () => {
-    
+
     //pegar dias do mes
-    let firstDayIndex = new Date(current_year, date.getMonth(), 1).getDay(); 
+    let firstDayIndex = new Date(current_year, date.getMonth(), 1).getDay();
     lastDayMonth = new Date(current_year, date.getMonth() + 1, 0).getDate();
     const prevLastDay = new Date(current_year, date.getMonth(), 0).getDate();
     const lastDayIndex = new Date(current_year, date.getMonth() + 1, 0).getDay();
@@ -64,7 +64,6 @@ const renderCalendar = () => {
     monthDays.innerHTML = days;
 }
 
-
 // inicio de slider entre os meses um slider entre os meses
 document.querySelector(".prev").addEventListener("click", () => {
     date.setMonth(date.getMonth() - 1);
@@ -85,21 +84,34 @@ event_btn.addEventListener("click", function () {
 
 class Ocurrence {
     constructor(date, description) {
-      this.date = date;
-      this.description = description;
+        this.date = date;
+        this.description = description;
     }
-  }
+}
 
-//
-daySelector.addEventListener("click", (e) => {
-    const el = e.target.innerHTML;
-    let event_date = `${current_month.innerHTML}/${el}/${current_year}`;
-    const book = new Ocurrence(event_date, "Empty")
-    arr_events.push(book); 
-    console.log(arr_events)
+function saveOcurrence() {
 
-})
+    let dateInfo = document.querySelector(".dateInfo");
 
-newEventButton.addEventListener("click", function() {
-    alert("i was clicked")
-})
+    daySelector.addEventListener("click", (e) => {
+        const el = e.target.innerHTML;
+        event_date = `${el} ${current_month.innerHTML} ${current_year}`;
+        dateInfo.innerText = event_date;
+    })
+
+    newEventButton.addEventListener("click", function () {
+        const splitEvent_date = event_date.replaceAll(' ','-')
+        let descInfo = document.querySelector(".descInfo").value
+        const ocurrence = new Ocurrence(splitEvent_date, descInfo.split()) // arranjar forma de validar as datas, se elas ja existem vamos apenas adicionar novas descriçoes
+        arr_events.push(ocurrence);
+        descInfo = document.querySelector(".descInfo").value = ""
+        console.log(arr_events)
+    })
+}
+saveOcurrence()
+// Agora o object ocurrence é salvo, e na decriçao temos uma array, vai facilitar em caso de 2 ou mais ocorrencias
+
+ function displayOcurrences(ocurrenceDate) {
+// por cada item na array de eventos vamos criar uma div que contem o titulo h2 que recebe a data e alguma tag para adicionar a descriçao ao UI
+
+ }
