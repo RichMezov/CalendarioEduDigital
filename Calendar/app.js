@@ -7,9 +7,10 @@ const daySelector = document.querySelector(".days")
 const newEventButton = document.querySelector(".add")
 var event_date;
 
-
 const date = new Date();
 const current_year = date.getFullYear()
+
+const ocurrenceList = [ ]
 
 const months = [
     "Janeiro",
@@ -27,54 +28,6 @@ const months = [
     
 ];
 
-
-class Store {
-    static getEvents() {
-        let arr_events; // Onde os objectos eventos sao armazenados
-      //verificar se há um objeto event dentro do local storage, se não tiver trás 1 array vazia
-      if (localStorage.getItem("events") === null ) {
-        arr_events = [];
-      } else {
-        arr_events = JSON.parse(localStorage.getItem('arr_events'));
-      }
-  
-      return arr_events;
-    }
-  
-    static addEvents(event) {
-      // pegar eventos armazenados
-      const arr_events = Store.getEvents();
-  
-      // Iterar sobre a array events com o forEach, com os parametros event e index
-      arr_events.forEach((event, index) => {
-  
-        if( event.description === description) {
-          // dividir o iterado atual da array pelo seu index
-          arr_events.splice(index, 1);
-        }
-      });
-  
-      localStorage.setItem('arr_events', JSON.stringify(arr_events)); // Atualizar items no local storage apos a adiçao
-    }
-  
-    static removeEvent(description) {
-      // conseguir os livros armazenados
-      const arr_events = Store.getEvents();
-  
-      // iterar sobre a array de livros armazenados
-      arr_events.forEach((event, index) => {
-        if(event.description === description) {
-        // a funçao splice pode ser usada para subistiruir, ou apagar certo item splice os metodos são (start, deleteCount, item1)  
-          arr_events.splice(index,1)
-        }
-      });
-      //local storage, recebe um item, com a key events, valor events(versao string)
-      localStorage.setItem("arr_events", JSON.stringify(arr_events)) // Atualizar items no local storage apos a adiçao
-    }
-  }
-
-const arr_events = Store.getEvents();//acessar eventos na classe store
-// Inicio  da funçao que adiciona os dias do mess
 const renderCalendar = () => {
 
     //pegar dias do mes
@@ -108,7 +61,6 @@ const renderCalendar = () => {
     }
     monthDays.innerHTML = days;
 }
-
 // inicio de slider entre os meses um slider entre os meses
 document.querySelector(".prev").addEventListener("click", () => {
     date.setMonth(date.getMonth() - 1);
@@ -127,11 +79,107 @@ event_btn.addEventListener("click", function () {
     event_info.classList.toggle("hide") // no click, se tiver event_info tiver a classe hide, essa classe sera removida... se event_info nao tiver a classe hide ela será adicionada
 })
 
-class Ocurrence {
+
+class Event {
     constructor(date, description) {
         this.date = date;
         this.description = description;
     }
+}
+
+class UI {
+    static displayEvents() { // verificado
+      const events = Store.getEvents();
+  
+      events.forEach((event) => UI.addOcurrenceToList(event));
+    }
+  
+    static addOcurrenceToList(event) {
+
+      const list = document.querySelector('#event-list');
+
+      const row = document.createElement('tr');
+  
+      row.innerHTML = `
+        <td>${event.title}</td>
+        <td>${event.description}</td>
+        <td><a href="#" class="btn btn-danger btn-sm delete">X</a></td>
+      `;
+      // adicionar novo evento a table
+      list.appendChild(row);
+    }
+
+    // Deletes a targeted element(event)
+    static deleteEvent(el) {
+      // Check if element has the class "delete"
+      if(el.classList.contains('delete')) {
+        // Remove "parent el" of the "parent el" (2 levels up to get entire row)
+        el.parentElement.parentElement.remove();
+      }
+    }
+  
+    // Alert
+    static showAlert(message, className) {
+
+      const div = document.createElement('div');
+
+      div.className = `alert alert-${className}`;
+
+      div.appendChild(document.createTextNode(message));
+
+      const container = document.querySelector('.container'); // ainda não temos um container
+
+      const form = document.querySelector('#event-form'); // ainda nao temos um event form
+
+      container.insertBefore(div, form);
+
+      setTimeout(() => document.querySelector('.alert').remove(), 3000);
+    }
+  
+    // Clears fields after submission
+    static clearFields() {
+      document.querySelector('.descInfo').value = ''; // vamos mudar para agir sobre sobre um input que vai conter texto da ocorrencia
+    }
+  }
+
+class Store { // esta classe ja foi revisada por completo
+    static getEvents() {
+    let events
+
+    if(localStorage.getItem("events") === null) {
+        events = []
+    } else {
+        events = JSON.parse(localStorage.getItem("events"))
+    }
+
+    return events
+   }
+
+    static addEvent(event) {
+
+    const events = Store.getEvents();
+
+    events.push(event);
+
+    localStorage.setItem('events', JSON.stringify(events));
+  }
+
+
+    static removeEvent(description) {
+
+    const events = Store.getEvents();
+
+
+    events.forEach((event, index) => {
+
+      if(event.description === description) {
+
+        events.splice(index, 1);
+      }
+    });
+
+    localStorage.setItem('events', JSON.stringify(events));
+  }
 }
 
 function saveOcurrence() {
@@ -147,28 +195,25 @@ function saveOcurrence() {
 
     newEventButton.addEventListener("click", function () {
         let descInfo = document.querySelector(".descInfo").value
-        const ocurrence = new Ocurrence(event_date, descInfo.split()) 
+        const event = new Event(event_date, descInfo.split())
         
         if ( event_date == undefined || descInfo == '') {
             alert("Por favor, Seleciona uma data e descriçao para a ocorrencia")
         } else {
-            Store.addEvents(ocurrence);
-            descInfo = document.querySelector(".descInfo").value = ""
+            Store.addEvent(event) // adicionar a arrat de eventos na store
+            UI.clearFields();
         }
     })
 }
 saveOcurrence()
 
  function displayOcurrences(ocurrenceDate) {
-    const filterdates = arr_events.filter(events => events.date == ocurrenceDate)// Receber apenas a descriçao das datas desejadas
-    const ocurrence_container = document.querySelector(".ocurrence_container");
+
+    const events = Store.getEvents();
+
+    const filterdates = events.filter(event => event.date == ocurrenceDate)// Receber apenas a descriçao das datas desejadas
     // iterar a const filterdates forEach, vamos trazer uma tmplate string com date e descreiption
-    const renderOcurrences = filterdates.map(ocurrenceElement => {
-        return `<tr>
-                    <th scope="row">${ocurrenceElement.date}</th>
-                    <td>${ocurrenceElement.description}</td>
-                </tr>`;
-    });
+    const renderOcurrences = filterdates.map(event => UI.addOcurrenceToList(event));
     ocurrence_container.innerHTML = renderOcurrences;
 
     console.log(filterdates)
