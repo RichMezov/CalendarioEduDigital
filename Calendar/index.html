@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <title>Calendario</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 </head>
+
 <body>
-    <div>
-        <h1>New changes in the projects</h1>
-        <p>how do i commit?</p>
-    </div>
+
     <div class="container">
         <div class="calendar">
             <div class="month">
@@ -31,31 +30,48 @@
                 <div>Qua</div>
                 <div>Qui</div>
                 <div>Sex</div>
-                <div>Sab</div>       
+                <div>Sab</div>
             </div>
             <div class="days">
-                
+
             </div>
-            <div class="eventBtt"> 
-                <button onclick="openEvents()">Ver eventos</button>
+            <div class="eventBtt">
+                <button class="events_btn">Ver eventos</button>
             </div>
         </div>
-        <div class="info">
-            <div class="infoTitle"> <h1>Dia 1 de Janeiro</h1></div>
+
+        <!-- Seçao onde veremos a informaçao sobre o dia selecionado -->
+        <div id="info" class="info">
+            <h2 class="dateInfo"></h2>
             <p>detalhes do dia</p>
             <div class="infoDisplay">
-                <div class="event">
-                    <h3 class="title1" id="T1">Titulo do evento</h3>
-                    <p class="pDesc">descricao do evento</p>
+                 <!-- Este bloco de codigo vai receber um valor para futuramente ser adicionado na div event -->
+                    <div class="event_input">
+                        <textarea class="descInfo" rows="10" cols="30" name="comment"></textarea>
                 </div>
             </div>
-                <div class="addBtn" >
-                    <button class="add" onclick="openInfo()"> + </button>
-                </div>
+            <div class="addBtn">
+                <button class="add"> + </button>
+            </div>
+            <div class="event_container">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th>data</th>
+                        <th>descriçao</th>
+                      </tr>
+                    </thead>
+                    <tbody id="event-list">
+
+                    </tbody>
+                  </table>
+            </div>
         </div>
     </div>
-
+    </div>
+    <!-- Fim Seçao onde veremos a informaçao sobre o dia selecionado -->
 
     <script src="app.js"></script>
 </body>
+
 </html>
