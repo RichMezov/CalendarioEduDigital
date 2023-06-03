@@ -1,113 +1,215 @@
-const date = new Date();
-
-const renderCalendar = () => {
+const event_btn = document.querySelector(".events_btn")
 const monthDays = document.querySelector(".days");
+const current_month = document.querySelector(".date h1");
+const current_fulldate = document.querySelector('.date p')
+const daySelector = document.querySelector(".days")
+const newEventButton = document.querySelector(".add")
+var event_date;
 
+const date = new Date();
+const current_year = date.getFullYear()
 
-const lastDay = new Date(date.getFullYear(),date.getMonth() + 1,0).getDate();
-
-
-const prevLastDay = new Date(date.getFullYear(),date.getMonth(),0).getDate();
-
-const firstDayIndex = date.getDay();
-
-const lastDayIndex = new Date(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    0
-).getDay();
-
-const nextDays = 7 - lastDayIndex - 1;
+const ocurrenceList = []
 
 const months = [
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro",
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
 
 ];
 
-document.querySelector(".date h1").innerHTML
-= months[date.getMonth()];
+const renderCalendar = () => {
 
-document.querySelector('.date p').innerHTML
-=new Date().toDateString();
+  //pegar dias do mes
+  let firstDayIndex = new Date(current_year, date.getMonth(), 1).getDay();
+  lastDayMonth = new Date(current_year, date.getMonth() + 1, 0).getDate();
+  const prevLastDay = new Date(current_year, date.getMonth(), 0).getDate();
+  const lastDayIndex = new Date(current_year, date.getMonth() + 1, 0).getDay();
+  const nextDays = 7 - lastDayIndex - 1;
+  current_month.innerHTML = months[date.getMonth()];
+  current_fulldate.innerHTML = new Date().toDateString();
 
-let days = "";
+  let days = "";
 
-for(let x = firstDayIndex; x > 0; x--) {
-    days += `<div class="prev-date">${prevLastDay - x + 1}</div>`
-}
-/* _____________________*/
-
-/*_____________________________________ */
-for (let i = 1; i <= lastDay; i++) {
-    if(i === new Date().getDate() && date.getMonth() === new Date().getMonth()){
-        days += `<div class="today">${i}</div>`;
+  // retorna Dias do mes anterior
+  for (let x = firstDayIndex; x > 0; x--) {
+    days += `<div class="prev-date">
+            ${prevLastDay - x}
+            </div>`
+  }
+  //iteraçao que retorna Dias do mes atual
+  for (let i = 1; i <= lastDayMonth; i++) {
+    if (i === new Date().getDate() && date.getMonth() === new Date().getMonth()) {
+      days += `<div class="today">${i}</div>`;
     }
     else
-    days += `<div>${i}</div>`;
-}
+      days += `<div>${i}</div>`;
+  }
 
-for(let j = 1; j<=nextDays; j++) {
+  for (let j = 1; j <= nextDays; j++) {
     days += `<div class="next-date">${j}</div>`;
-    monthDays.innerHTML = days;
+  }
+  monthDays.innerHTML = days;
 }
-}
-
-document.querySelector(".prev").addEventListener("click", () =>{
-    date.setMonth(date.getMonth() - 1);
-    renderCalendar();
+// inicio de slider entre os meses um slider entre os meses
+document.querySelector(".prev").addEventListener("click", () => {
+  date.setMonth(date.getMonth() - 1);
+  renderCalendar();
 })
 
-document.querySelector(".next").addEventListener("click", () =>{
-    date.setMonth(date.getMonth() + 1);
-    renderCalendar();
+document.querySelector(".next").addEventListener("click", () => {
+  date.setMonth(date.getMonth() + 1);
+  renderCalendar();
 })
-
-
-
+// Fim de slider entre os meses um slider entre os meses
 renderCalendar();
 
-//New changes
-const info = document.querySelector(".info");
-const infoContainer = document.querySelector(".infoDisplay");
-let counter = 0;
+event_btn.addEventListener("click", function () {
+  const event_info = document.getElementById("info")
+  event_info.classList.toggle("hide") // no click, se tiver event_info tiver a classe hide, essa classe sera removida... se event_info nao tiver a classe hide ela será adicionada
+})
 
-const diaTest = document.querySelector(".divTest")
-let events = "";
-let isOpen = false;
 
-function openInfo() {
-    if(counter <= 5) {
-        
-        events += `<div class="event"><h3>tile of event</h3>
-        <p>descricao do evento pode ser grande</p></div>`
-        infoContainer.innerHTML = events
-        counter++;
-    };
+class Event {
+  constructor(date, description) {
+    this.date = date;
+    this.description = description;
+  }
 }
 
-function openEvents() {
+class UI {
+  static displayEvents(eventDate) { // verificado
+
+    const events = Store.getEvents();
+    const filterdates = events.filter(event => event.date == eventDate);
+    const list = document.querySelector('#event-list');
     
 
-    if(isOpen === false) {
-        info.style.display = "block";
-        isOpen = true;
-        console.log(isOpen)
+    // o innerhtml da list, recebe iteraçao da filtered array que retorna o valor abaixo
+    const currentEvents = filterdates.map(event => {
+      return `</tr>
+        <td>${event.date}</td>
+        <td>${event.description}</td>
+        <td><a href="#" class="btn btn-danger btn-sm delete">X</a></td>
+        </tr>
+      `;
+  });
+
+  list.innerHTML = currentEvents;  
+  }
+
+  // Deletes a targeted element(event)
+  static deleteEvent(el) {
+    // Check if element has the class "delete"
+    if (el.classList.contains('delete')) {
+      // Remove "parent el" of the "parent el" (2 levels up to get entire row)
+      el.parentElement.parentElement.remove();
     }
-    else if(isOpen === true) {
-        info.style.display = "none";
-        isOpen = false;
-    }
+  }
+
+  // Alert
+  static showAlert(message, className) {
+
+    const div = document.createElement('div');
+
+    div.className = `alert alert-${className}`;
+
+    div.appendChild(document.createTextNode(message));
+
+    const container = document.querySelector('.container'); // ainda não temos um container
+
+    const form = document.querySelector('#event-form'); // ainda nao temos um event form
+
+    container.insertBefore(div, form);
+
+    setTimeout(() => document.querySelector('.alert').remove(), 3000);
+  }
+
+  // Clears fields after submission
+  static clearFields() {
+    document.querySelector('.descInfo').value = ''; // vamos mudar para agir sobre sobre um input que vai conter texto da ocorrencia
+  }
 }
 
+class Store { // esta classe ja foi revisada por completo
+  static getEvents() {
+    let events
 
+    if (localStorage.getItem("events") === null) {
+      events = []
+    } else {
+      events = JSON.parse(localStorage.getItem("events"))
+    }
+
+    return events
+  }
+
+  static addEvent(event) {
+
+    const events = Store.getEvents();
+
+    events.push(event);
+
+    localStorage.setItem('events', JSON.stringify(events));
+  }
+
+
+  static removeEvent(description) {
+
+    const events = Store.getEvents();
+
+
+    events.forEach((event, index) => {
+      if (event.description === description) {
+        events.splice(index, 1);
+      }
+    });
+
+    localStorage.setItem('events', JSON.stringify(events));
+  }
+}
+
+function saveOcurrence() {
+
+  let dateInfo = document.querySelector(".dateInfo");
+
+  daySelector.addEventListener("click", (e) => {
+    const el = e.target.innerHTML;
+    event_date = `${el}-${current_month.innerHTML}-${current_year}`;
+    dateInfo.innerText = event_date;
+    UI.displayEvents(event_date)
+  })
+
+  newEventButton.addEventListener("click", function () {
+    let descInfo = document.querySelector(".descInfo").value
+    const event = new Event(dateInfo.innerHTML, descInfo)
+
+    if (event_date == undefined || descInfo == '') {
+      alert("Por favor, Seleciona uma data e descriçao para a ocorrencia")
+    } else {
+      Store.addEvent(event) // adicionar a arrat de eventos na store
+      UI.clearFields();
+    }
+  })
+}
+
+document.querySelector('#event-list').addEventListener('click', (e) => {
+
+
+  UI.displayEvents(e.target);
+
+ Store.removeEvent(e.target.parentElement.previousElementSibling.textContent);
+
+  // UI.showAlert('Book Removed', 'success');
+});
+
+saveOcurrence()
